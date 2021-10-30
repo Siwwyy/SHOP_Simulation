@@ -12,6 +12,15 @@ public class Cargo {
     {
         this.cargo_id = cargo_id;
         this.cargo_amount = cargo_amount;
+        this.cargo_price = 0.f;
+        this.cargo_name = cargo_name;
+    }
+
+    public Cargo(int cargo_id, int cargo_amount, float cargo_price, String cargo_name)
+    {
+        this.cargo_id = cargo_id;
+        this.cargo_amount = cargo_amount;
+        this.cargo_price = cargo_price;
         this.cargo_name = cargo_name;
     }
 
@@ -52,6 +61,7 @@ public class Cargo {
     {
       return "Cargo id: " + String.valueOf(this.cargo_id) + 
       " | Cargo amount: " + String.valueOf(this.cargo_amount) +
+      " | Cargo price: " + String.valueOf(this.cargo_price) +
       " | Cargo name: " + String.valueOf(this.cargo_name) + '\n';
     }
 }

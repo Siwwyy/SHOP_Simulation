@@ -12,7 +12,9 @@ public class Lidl extends Shop_Base
     @Override
     public void marketplace_strategy() 
     {
-        //buys big amount of cargos
+        //buys medium amount of cargos
+        market_resuply(100);
+
     }
     
 }
