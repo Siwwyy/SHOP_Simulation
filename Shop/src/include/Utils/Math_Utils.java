@@ -1,5 +1,7 @@
 package include.Utils;
 
+import java.util.Random;
+
 public class Math_Utils
 {
     
@@ -19,4 +21,29 @@ public class Math_Utils
     }
 
 
+    int getPoisson (Random rand, double lambda) 
+    {
+        double l = Math.exp(-lambda);
+        double p = 1.0;
+        int k = 0;
+        do
+        {
+            k++;
+            p *= rand.nextDouble();
+        } 
+        while (p > l);
+        return k - 1;
+    }
+
+    double getExp(Random rand, double lambda) 
+    {
+        return -lambda*Math.log(1-rand.nextDouble());
+    }
+
+    int get_client_age()
+    {
+        Random r = new Random();
+        double myG = r.nextGaussian()*20+65;
+        return (int)myG;
+    }
 }
