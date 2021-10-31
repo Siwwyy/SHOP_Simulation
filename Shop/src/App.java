@@ -7,7 +7,7 @@ public class App
 {
     public static void main(String[] args) throws Exception 
     {
-        new Lidl();
+
         // Shop_Base[] shops = { new Lidl(), new Careffour(), new Zabka() };
 
         // float credit_cost = 1.02f;
@@ -21,6 +21,25 @@ public class App
         //         }
         //     }
         // }
+
+
+        Shop_Base hehe = new Lidl();
+        for(int i = 0; i < 1000; ++i)
+        {
+         
+            if(i % 10 == 0)
+            {
+                float credit_cost = 1.02f;
+                hehe.marketplace_strategy(); //do resuply and other stuffs every 10 days
+                hehe.credit_increase(credit_cost);
+            }
+            hehe.print_shop();
+            hehe.market_sell("cargo1", 300);
+            
+         
+            System.out.println("\n============================\n");
+            Thread.sleep(4000);
+        }
 
     }
 }

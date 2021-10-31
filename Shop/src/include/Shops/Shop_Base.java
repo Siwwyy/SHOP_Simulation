@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Queue;
 
 import include.Cargo;
+import include.Pair;
 import include.Utils.Math_Utils;
 
 
@@ -17,7 +18,7 @@ public abstract class Shop_Base
     private float shop_credit;
     private final float shop_margin = 1.2f;
     List <Cargo> cargo_list;
-    Queue<Cargo> cargo_queue;
+    Queue<Pair<Cargo, Integer>> cargo_queue;
 
 
 
@@ -54,27 +55,28 @@ public abstract class Shop_Base
             "cargo8", //8
         };
 
-        float[] prices = Math_Utils.linspace(80, 2000, this.shop_capacity);
+        float min_price = 80.f;
+        float max_price = 2000.f;
+        float[] prices = Math_Utils.linspace(min_price, max_price, this.shop_capacity);
 
         for(int i = 0; i < this.shop_capacity; ++i)
         {
             this.cargo_list.add(i, new Cargo(i+1, 0, prices[i], cargo_names[i]));
-            // System.out.println(this.cargo_list.get(i));
         }
     }
 
     public Shop_Base()
     {
-        this.shop_capacity = 8;
+        this.shop_capacity = 1;
         this.shop_credit = 0.0f;
         this.cargo_list = new ArrayList<Cargo>(this.shop_capacity);
-        this.cargo_queue = new LinkedList<Cargo>();
+        this.cargo_queue = new LinkedList<Pair<Cargo, Integer>>();
         init_cargo_list();
     }
 
     public void increase_credit(float cargo_price, float amount)
     {
-        float income = cargo_price * amount;
+        float income = cargo_price * amount * this.shop_margin;
         this.shop_credit += income;
     }
 
@@ -89,8 +91,15 @@ public abstract class Shop_Base
         for (Cargo cargo: this.cargo_list) 
         {
             decrease_credit(cargo.getCargo_price(), new_amount);
-            cargo.setCargo_amount(new_amount);
+            int new_cargo_amount = cargo.getCargo_amount() + new_amount;
+            cargo.setCargo_amount(new_cargo_amount);
         }
+    }
+
+    public void credit_increase(float credit_percentage)
+    {
+        float new_credit_amount = (this.shop_credit * credit_percentage) - this.shop_credit;
+        this.shop_credit -= new_credit_amount;
     }
 
     public void market_sell(String cargo_name, int amount)
@@ -104,9 +113,13 @@ public abstract class Shop_Base
                 {
                     //If new amount is less than 0, then add that product to queue
                     //and wait for resuply
+                    this.cargo_queue.add(new Pair<Cargo, Integer>(cargo, amount));
                 }
                 else
                 {
+                    //maybe rethink, saving a client, who is waiting for that cargo, to keep it until first 
+                    //person buy amount it wants
+                    increase_credit(cargo.getCargo_price(), amount);
                     cargo.setCargo_amount(new_cargo_amount);
                 }
                 break;
@@ -115,9 +128,40 @@ public abstract class Shop_Base
         }
     }
 
+    public void print_shop()
+    {
+        System.out.println("Shop credit: " + this.shop_credit);
+        for (Cargo cargo: this.cargo_list) 
+        {
+            System.out.println(cargo.toString());
+        }
+    }
+
     public void market_sell_queue()
     {
+        if(this.cargo_queue.isEmpty())
+        {
+            return;
+        }
 
+        for(Pair<Cargo, Integer> cargo_pair_elem : this.cargo_queue)
+        {
+            for (Cargo cargo: this.cargo_list) 
+            {
+                if(cargo_pair_elem.getleft().getCargo_name() == cargo.getCargo_name())
+                {
+                    if(cargo_pair_elem.getright() <= cargo.getCargo_amount())
+                    {
+                        int amount = cargo_pair_elem.getright();
+                        int new_cargo_amount = cargo.getCargo_amount() - amount;
+
+                        increase_credit(cargo.getCargo_price(), amount);
+                        cargo.setCargo_amount(new_cargo_amount);
+                    }
+                    break;
+                }
+            }
+        }
     }
 
     public abstract void marketplace_strategy();

@@ -14,7 +14,7 @@ public class Lidl extends Shop_Base
     {
         //buys medium amount of cargos
         market_resuply(100);
-
+        market_sell_queue();
     }
     
 }
