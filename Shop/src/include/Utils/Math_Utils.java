@@ -23,7 +23,7 @@ public class Math_Utils
             linear_space[0] = start;
             for(int i = 1; i < range - 1; ++i)
             {
-                linear_space[i] = start + steps * i;
+                linear_space[i] = start + (float)(steps * i);
             }
             linear_space[range - 1] = end;
         }
@@ -31,7 +31,7 @@ public class Math_Utils
     }
 
 
-    int getPoisson (Random rand, double lambda) 
+    public static int getPoisson(Random rand, double lambda) 
     {
         double l = Math.exp(-lambda);
         double p = 1.0;
@@ -45,15 +45,26 @@ public class Math_Utils
         return k - 1;
     }
 
-    double getExp(Random rand, double lambda) 
+    public static double getExp(Random rand, double lambda) 
     {
         return -lambda*Math.log(1-rand.nextDouble());
     }
 
-    int get_client_age()
+    public static int get_gaussian_distribution()
     {
         Random r = new Random();
         double myG = r.nextGaussian()*20+65;
         return (int)myG;
     }
+
+    public static int get_client_age()
+    {
+        int age = get_gaussian_distribution();
+        if(age < 20 || age > 99)
+        {
+            return get_client_age();
+        }
+        return age;
+    }
+
 }

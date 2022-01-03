@@ -6,7 +6,7 @@ public class Cargo {
     private int cargo_id = 0;
     private int cargo_amount = 0;
     private float cargo_price = 0.f;
-    private String cargo_name = "Shit";
+    private String cargo_name = "Nothing";
 
     public Cargo(int cargo_id, int cargo_amount, String cargo_name)
     {

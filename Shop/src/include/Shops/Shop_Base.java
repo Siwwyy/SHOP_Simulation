@@ -67,7 +67,7 @@ public abstract class Shop_Base
 
     public Shop_Base()
     {
-        this.shop_capacity = 1;
+        this.shop_capacity = 8;
         this.shop_credit = 0.0f;
         this.cargo_list = new ArrayList<Cargo>(this.shop_capacity);
         this.cargo_queue = new LinkedList<Pair<Cargo, Integer>>();
